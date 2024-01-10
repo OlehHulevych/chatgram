@@ -1,7 +1,7 @@
 import {useState, ReactNode, createContext, useContext} from 'react'
 
 interface MainContextProps {
-    children:ReactNode
+    children?:ReactNode
 }
 
 interface MainContextType {

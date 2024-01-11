@@ -15,11 +15,7 @@ const UserShcema = new Schema <User & Document>({
         unique:true,
     },
 
-    socketId:{
-        type:String,
-        required:true
-        
-    },
+    
     password:{
         type:String,
         required:true

@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import mongoose from 'mongoose';
 import bodyParser = require('body-parser');
 const cors = require('cors')
+import userRoutes from '../Routes/userRoutes'
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 
@@ -21,6 +22,7 @@ const corsOptions = {
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
+app.use(userRoutes)
 
 
 

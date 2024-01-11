@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt = require('jsonwebtoken') 
 import dotenv from 'dotenv'
 
+
 dotenv.config()
 const expiresInTime = 3*24*60*60
 const jwt_secret:any = process.env.JWT_SECRET; 
@@ -11,53 +12,40 @@ const jwt_secret:any = process.env.JWT_SECRET;
 
 
 
-const registerUserController = async (req:Request, res:Response)=>{
-    try{
-        const {io, socketId} = req.app.locals;
+export const registerUserController = async (req:Request, res:Response)=>{ 
         const {email,username,password} = req.body;
-    const passwrodBcrypted = bcrypt.hash(password, 10);
-
+    const passwrodBcrypted = await bcrypt.hash(password, 10);
+    console.log(req.body)
     const newUser = new UserModel({
         username:username,
-        email:email,
         password:passwrodBcrypted,
-        socketId:socketId
+        email:email
     })
-
-    
-
     await newUser.save()
-
-    
-    
-    const token = jwt.sign({id:newUser._id},jwt_secret, {expiresIn:expiresInTime} )
-
-    return res.json({message:"The user was registered successfll", token:token});
-    }
-    catch(error){
-        return res.json({error:`Something went wrong during the registration.There are error:${error}`, })
-    }
-    
-
-    
+    .then(()=>{
+        const token = jwt.sign({id:newUser._id},jwt_secret, {expiresIn:expiresInTime} )
+        return res.json({message:"The user was registered successfull", token:token});
+    })
+    .catch((error)=>{
+        return res.json({messageError:`There are error:${error}`})
+    })
 }
 
-const loginController = async (req:Request,res:Response)=>{
+export const loginController = async (req:Request,res:Response)=>{
     const {email, password} = req.body;
-    const foundUser:any = UserModel.find({email})
-    if(foundUser){
-        if(password == foundUser.password){
-            await foundUser.save()
-            const token = jwt.sign({id:foundUser._id}, jwt_secret, {expiresIn:expiresInTime})
-            return res.json({message:"login was successfull", token:token})
-        }
-        else{
-           return res.json({messageError:"Incorrect password"})
-        }
-        
-    } 
-    else{
-        return res.json({messgaeError:"The user was not found"})
+    const foundUser:any = await UserModel.findOne({email})
+    console.log(foundUser)
+    if(!foundUser){
+        return res.json({messageError:"The user was not found"})
     }
+
+    const isMatch = await bcrypt.compare(password, foundUser.password )
     
+    if(isMatch){
+        const token = jwt.sign({id:foundUser._id}, jwt_secret, {expiresIn:expiresInTime})
+        return res.json({message:"The login was succsefully", token:token})
+    }
+    else{
+        res.json({passwordError:"The password is valid"})
+    }
 }   

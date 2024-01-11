@@ -3,13 +3,12 @@ import Contact from './Contact'
 import Burger from './Burger'
 import MenuBar from './MenuBar'
 import BarContext from '../context/BarContext'
-import { useMainContext } from '../context/MainContext'
 import ChangeAccountMenu from './ChangeAccountMenu'
 
 export default function UserBar() {
 
   
-  const {openMenuAccount} = useMainContext()
+
 
   return (
     <BarContext>
@@ -25,7 +24,7 @@ export default function UserBar() {
     </div>
     
     <MenuBar/>
-    {openMenuAccount && <ChangeAccountMenu/>}
+    <ChangeAccountMenu/>
     </BarContext>
    
     

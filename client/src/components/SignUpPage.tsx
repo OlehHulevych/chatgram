@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthenticationContext"
+import { Link } from "react-router-dom"
 
 
 export default function SignUpPage() {
@@ -16,6 +17,7 @@ export default function SignUpPage() {
             <label className='my-4' htmlFor="">Password</label>
             <input className='mb-2 rounded-xl bg-cyan-800 p-0.5 px-8 focus:outline-none' type="password" id="password" name="password" />
             <button className='rounded-xl bg-cyan-950 mt-6 py-2 hover:bg-cyan-600'>Sign up</button>
+            <p className="mt-4 text-base text-center">You already have account. <Link className="hover:text-blue-800" to="/login">Login</Link></p>
         </form>
     </div>
   

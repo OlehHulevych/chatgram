@@ -3,6 +3,7 @@ import { Request,Response } from "express";
 import bcrypt from 'bcrypt'
 import jwt = require('jsonwebtoken') 
 import dotenv from 'dotenv'
+import { decoder } from "../utils/decoder";
 
 
 dotenv.config()
@@ -48,5 +49,21 @@ export const loginController = async (req:Request,res:Response)=>{
     else{
         res.json({passwordError:"The password is valid"})
     }
+}
+
+export const controllerGetUserInformation = async(req:Request, res:Response) =>{
+    try{
+        const {token} =  req.body;
+        const id = await decoder(token);
+        const foundUser = await UserModel.findById(id);
+        return res.json({user:foundUser , message:"The user was founded"})
+
+    }
+
+    catch(error){
+        return res.json({error:error})
+    }
+    
+
 }
 

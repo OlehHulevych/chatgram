@@ -6,6 +6,16 @@ interface AuthenticationContextProps{
     children:ReactNode
 }
 
+interface UserType  {
+    username?:string,
+    id?:string,
+    email?:string,
+    password?:string
+}
+
+
+
+
 
 
 interface contextValueTypes{
@@ -13,9 +23,10 @@ interface contextValueTypes{
     handleRegister:React.FormEventHandler<HTMLFormElement>,
     handleAuthentication:()=>void
     isAuhtenticated:boolean,
-    setIsAuthenticated:()=>void
-    username:string,
-    setUsername:(value:string)=>void
+    setIsAuthenticated:()=>void,
+    logOut:()=>void;
+    user:UserType,
+   
     
 }
 
@@ -23,7 +34,7 @@ const AuthenticationContextProvider = createContext<contextValueTypes | undefine
 
 export default function AuthenticationContext({children}:AuthenticationContextProps) {
     const navigate = useNavigate();
-    const [username, setUsername] = useState<string>("")
+    const [user, setUser] = useState<UserType>({})
     const [isAuhtenticated, setIsAuthenticated] = useState<boolean>(false)
 
    const handleLogin:React.FormEventHandler<HTMLFormElement> = async (event)=>{
@@ -43,6 +54,8 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
     
 
    }
+
+   
 
    const handleRegister:React.FormEventHandler<HTMLFormElement> = async(event) =>{
     event.preventDefault();
@@ -67,15 +80,41 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
     
    }
 
+   const handleAuthentication = async () =>{
+        try{
+            const token = localStorage.getItem('token')
+            if(!token){
+                navigate('/login')
+            }
+            else{
+                const response = await axios.post('http://localhost:5000/getInfo', { token })
+                const gotUser = response.data.user
+                setUser(gotUser)
+                setIsAuthenticated(true)
+
+            }
+        }
+        catch(error){
+            console.error(error)
+        }
+       
+   }
+
+   const handleLogOut = ()=>{
+    localStorage.removeItem('token')
+    console.log("The user loged out")
+   }
+
    
 
    const contextValue:contextValueTypes = {
     handleLogin:handleLogin,
     handleRegister:handleRegister,
     isAuhtenticated:isAuhtenticated,
+    handleAuthentication:handleAuthentication,
     setIsAuthenticated:()=>setIsAuthenticated(!isAuhtenticated),
-    setUsername:(value:string)=>setUsername(value),
-    username:username
+    user:user,
+    logOut:handleLogOut
     
    }
 

@@ -1,5 +1,6 @@
 import React ,{createContext, ReactNode, useState, useContext} from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 interface AuthenticationContextProps{
     children:ReactNode
@@ -8,8 +9,9 @@ interface AuthenticationContextProps{
 
 
 interface contextValueTypes{
-    handleLogin:(event:React.MouseEvent<HTMLButtonElement>, email:string, password:string)=>void,
-    handleRegister:(event:React.MouseEvent<HTMLButtonElement>, email:string, password:string, username:string)=>void,
+    handleLogin:React.FormEventHandler<HTMLFormElement>
+    handleRegister:React.FormEventHandler<HTMLFormElement>,
+    handleAuthentication:()=>void
     isAuhtenticated:boolean,
     setIsAuthenticated:()=>void
     username:string,
@@ -20,15 +22,20 @@ interface contextValueTypes{
 const AuthenticationContextProvider = createContext<contextValueTypes | undefined>(undefined)
 
 export default function AuthenticationContext({children}:AuthenticationContextProps) {
-
+    const navigate = useNavigate();
     const [username, setUsername] = useState<string>("")
     const [isAuhtenticated, setIsAuthenticated] = useState<boolean>(false)
 
-   const handleLogin = async (event:React.MouseEvent<HTMLButtonElement>, email:string, password:string)=>{
+   const handleLogin:React.FormEventHandler<HTMLFormElement> = async (event)=>{
     event.preventDefault();
     try{
+        const email = event.currentTarget.email.value
+        const password = event.currentTarget.password.value;
         const response = await axios.post('http://localhost:5000/login', {email, password})
     localStorage.setItem('token', response.data.token)
+    console.log(response)
+    
+    navigate('/')
     }
     catch(error){
         console.log("There are error:"+error)
@@ -37,11 +44,21 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
 
    }
 
-   const handleRegister = async(event:React.MouseEvent<HTMLButtonElement>, email:string, password:string, username:string) =>{
+   const handleRegister:React.FormEventHandler<HTMLFormElement> = async(event) =>{
     event.preventDefault();
+        
+
+
     try{
+        const email = event.currentTarget.email.value
+        const username= event.currentTarget.username.value;
+        const password=  event.currentTarget.password.value
+        
         const response = await axios.post('http://localhost:5000/register', {email, password, username})
         localStorage.setItem('token', response.data.token)
+        
+        navigate('/')
+        
 
     }
     catch(error){
@@ -49,6 +66,8 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
     }
     
    }
+
+   
 
    const contextValue:contextValueTypes = {
     handleLogin:handleLogin,
@@ -69,6 +88,7 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = ()=>{
     const context = useContext(AuthenticationContextProvider)
     if(!context){

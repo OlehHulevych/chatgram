@@ -48,4 +48,5 @@ export const loginController = async (req:Request,res:Response)=>{
     else{
         res.json({passwordError:"The password is valid"})
     }
-}   
+}
+

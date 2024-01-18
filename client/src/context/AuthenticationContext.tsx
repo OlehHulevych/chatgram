@@ -26,6 +26,7 @@ interface contextValueTypes{
     setIsAuthenticated:()=>void,
     logOut:()=>void;
     user:UserType,
+    error:string|null
    
     
 }
@@ -36,6 +37,7 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
     const navigate = useNavigate();
     const [user, setUser] = useState<UserType>({})
     const [isAuhtenticated, setIsAuthenticated] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
    const handleLogin:React.FormEventHandler<HTMLFormElement> = async (event)=>{
     event.preventDefault();
@@ -43,10 +45,21 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
         const email = event.currentTarget.email.value
         const password = event.currentTarget.password.value;
         const response = await axios.post('http://localhost:5000/login', {email, password})
-    localStorage.setItem('token', response.data.token)
-    console.log(response)
+        if(response.data.token){
+            localStorage.setItem('token', response.data.token)
+            console.log(response)
+            navigate('/')
+
+        }
+        else if(response.data.userError){
+            setError(response.data.userError)
+        }
+        else if(response.data.passwordError){
+            setError(response.data.passwordError)
+        }
     
-    navigate('/')
+    
+    
     }
     catch(error){
         console.log("There are error:"+error)
@@ -66,13 +79,11 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
         const email = event.currentTarget.email.value
         const username= event.currentTarget.username.value;
         const password=  event.currentTarget.password.value
-        
         const response = await axios.post('http://localhost:5000/register', {email, password, username})
-        localStorage.setItem('token', response.data.token)
-        
-        navigate('/')
-        
-
+        if(response.data.token){
+            localStorage.setItem('token', response.data.token)
+            navigate('/')
+        }    
     }
     catch(error){
         console.log("There are error: "+error)
@@ -114,7 +125,8 @@ export default function AuthenticationContext({children}:AuthenticationContextPr
     handleAuthentication:handleAuthentication,
     setIsAuthenticated:()=>setIsAuthenticated(!isAuhtenticated),
     user:user,
-    logOut:handleLogOut
+    logOut:handleLogOut,
+    error:error
     
    }
 

@@ -37,7 +37,7 @@ export const loginController = async (req:Request,res:Response)=>{
     const foundUser:any = await UserModel.findOne({email})
     console.log(foundUser)
     if(!foundUser){
-        return res.json({messageError:"The user was not found"})
+        return res.json({userError:"The user was not found"})
     }
 
     const isMatch = await bcrypt.compare(password, foundUser.password )

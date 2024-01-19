@@ -1,14 +1,14 @@
 import { Request, Response } from "express"
 import { Message, MessageModel } from "../models/Message"
-import { UserModel } from "../models/User"
+import { UserModel, User } from "../models/User"
 import { chatModel } from "../models/Chat"
+import { userType } from "../types"
+import { Document } from "mongoose"
 
-interface User {
-    _id:string
-}
+
 
 export interface UserRequest extends Request{
-    user:User
+    user:Document<User>
 }
 
 export const getMessage = async (req:Request,res:Response) =>{

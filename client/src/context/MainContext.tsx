@@ -6,7 +6,9 @@ interface MainContextProps {
 
 interface MainContextType {
     openMenuAccount:boolean,
-    openerMenuAccount:()=>void
+    openerMenuAccount:()=>void,
+    toggleFindContact:()=>void,
+    openFindContact:boolean
     
 }
 
@@ -16,14 +18,22 @@ const MainContextProvider = createContext<MainContextType | undefined>(undefined
 
 export default function MainContext({children}:MainContextProps) {
     const [openMenuAccount, setOpenMenuAccount] = useState(false);
+    const [openFindContact, setOpenFindContact] = useState(false)
     const openerMenuAccount = ()=>{
         setOpenMenuAccount(!openMenuAccount)
         console.log("Hello world")
     }
 
+    const toggleFindContact = () =>{
+        setOpenFindContact(!openFindContact)
+        console.log("Ukriane")
+    }
+
     const contextValue:MainContextType = {
         openMenuAccount,
-        openerMenuAccount
+        openerMenuAccount,
+        openFindContact,
+        toggleFindContact
     }
   return (
     <MainContextProvider.Provider value={contextValue}>

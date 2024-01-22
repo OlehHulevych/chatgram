@@ -6,6 +6,7 @@ const cors = require('cors')
 import userRoutes from '../Routes/userRoutes'
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import messageRouter from '../Routes/messageRoutes'
 
 dotenv.config()
 
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use(userRoutes)
+app.use('/message', messageRouter)
 
 
 

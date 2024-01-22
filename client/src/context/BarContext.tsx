@@ -19,9 +19,7 @@ export default function BarContext({children}:BarContextProps) {
     const toggleBar = ()=>{
         setOpenBar(!openBar);
         console.log("Hello World")
-    }
-
-    
+    }    
   return (
     
       <BarUpdateContext.Provider value={toggleBar}>

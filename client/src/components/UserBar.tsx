@@ -4,6 +4,7 @@ import Burger from './Burger'
 import MenuBar from './MenuBar'
 import BarContext from '../context/BarContext'
 import ChangeAccountMenu from './ChangeAccountMenu'
+import FindContact from './FindContact'
 
 export default function UserBar() {
 
@@ -13,9 +14,9 @@ export default function UserBar() {
   return (
     <BarContext>
     <div className='w-1/4 min-h-screen font-inter text-2xl bg-cyan-600  pt-2   '>
-      <div className='px-2 flex items-center'>
+      <div className='w-full px-0.5 flex items-center justify-between '>
         <Burger/>
-        <input className='rounded-xl p-1 pl-1.5 text-lg w-100 w-5/6 mb-2 ' type="text" placeholder='Search' />
+        <div className='text-4xl text-white  cursor-pointer float-right hover:bg-cyan-800 rounded-full px-2 py-0.5'>+</div>
       </div>
         <h2 className='text-lg pl-2'>Contacts:</h2>
         <div className='pt-4'>
@@ -25,6 +26,7 @@ export default function UserBar() {
     
     <MenuBar/>
     <ChangeAccountMenu/>
+    <FindContact/>
     </BarContext>
    
     

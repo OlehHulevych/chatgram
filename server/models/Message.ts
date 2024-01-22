@@ -9,7 +9,7 @@ interface Message {
 }
 
 const messageSchema = new Schema<Message & Document>({
-    sender:{type:Schema.Types.ObjectId, ref:'User', required:true},
+    sender:{type:Schema.Types.ObjectId, ref:'User'},
     receiver:{type:Schema.Types.ObjectId, ref:'User'},
     text:{type:String,required:true},
     chat:{

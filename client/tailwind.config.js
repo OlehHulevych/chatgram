@@ -10,7 +10,7 @@ export default {
         'custom-image':"url('./background_photo.jpg')"
       },
       backgroundColor:{
-        'bar-opacity-color':'rgba(0,0,0,0.2)'
+        'bar-opacity-color':'rgba(0,0,0,0.2d)'
       }
     },
   },

@@ -8,7 +8,7 @@ import { Document } from "mongoose"
 
 
 export interface UserRequest extends Request{
-    user:Document<User>
+    user:Document<User, any>
 }
 
 export const getMessage = async (req:Request,res:Response) =>{
@@ -21,12 +21,12 @@ export const getMessage = async (req:Request,res:Response) =>{
     }
     catch(error){
         console.log(error)
-        res.status(400)
+        res.status(400).json({error:"Something went wrong"})
     }
 }
 
 
-export const sendMessage = async (req:UserRequest, res:Response) =>{
+export const sendMessage = async (req:any, res:Response) =>{
     const {content, chatId} = req.body;
     if(!content || !chatId){
         console.log("Passed invalid information")

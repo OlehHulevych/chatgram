@@ -70,11 +70,11 @@ export const controllerGetUserInformation = async(req:Request, res:Response) =>{
 export const findUserController = async (req:Request, res:Response) =>{
     const {search}:any = req.query;
 
-    const foundUsers = await UserModel.find({}).lean();
+    const foundUsers = await UserModel.find({username:{$regex:new RegExp(search, 'i')}}).lean();
 
-    if(search){
-        const users = foundUsers.filter(user=>user.username.toLowerCase().includes(search))
-        return res.json({users:users});
+    if(foundUsers){
+        console.log(foundUsers)
+        return res.json({users:foundUsers});
     }
 }
 

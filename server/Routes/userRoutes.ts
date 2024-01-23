@@ -6,6 +6,6 @@ const router = Router();
 router.post('/register', registerUserController );
 router.post('/login', loginController);
 router.post('/getInfo', controllerGetUserInformation)
-router.get('/searchUser?search', findUserController)
+router.get('/searchUser', findUserController)
 
 export default router;

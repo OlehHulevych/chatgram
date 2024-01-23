@@ -7,6 +7,7 @@ import userRoutes from '../Routes/userRoutes'
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import messageRouter from '../Routes/messageRoutes'
+import chatRoutes from '../Routes/chatRoutes'
 
 dotenv.config()
 
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use(userRoutes)
 app.use('/message', messageRouter)
+app.use('/chat', chatRoutes)
 
 
 

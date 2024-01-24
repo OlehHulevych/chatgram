@@ -5,25 +5,26 @@ import dotenv from 'dotenv'
 import { User, UserModel } from "../models/User"
 import { userType } from "../types"
 import { Document } from "mongoose"
+import { decoder } from "../utils/decoder"
 
 
 dotenv.config()
 
 export const authMiddleware = async(req:any,res:Response, next:NextFunction ) =>{
-    const {Authorization}:any = req.headers
+    const {authorization}:any = req.headers
 
-    if(!Authorization) {
+    if(!authorization) {
         return res.status(401).json({error:"There are no user"})
     }
 
-    const token = Authorization.split(" ")[1]
+    const token = authorization.split(" ")[1]
 
     const jwt_secret:any = process.env.JWT_SECRET
 
     try{
-        const {_id}:any = jwt.verify(token, jwt_secret);
+        const id:any = await decoder(token);
 
-        const user:any= await UserModel.findById(_id).exec()
+        const user:any= await UserModel.findById(id)
 
         req.user = user 
         next()

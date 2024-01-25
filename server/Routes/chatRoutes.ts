@@ -6,6 +6,6 @@ const router = Router();
 
 router.use(authMiddleware)
 router.post('/access', accessChat);
-router.post('/get', fetchChats)
+router.get('/get', fetchChats)
 
 export default router

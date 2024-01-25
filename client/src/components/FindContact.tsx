@@ -32,7 +32,7 @@ export default function FindContact() {
             <input type="text" value={search} className='w-full p-2 rounded-xl mt-2' onChange={(e:ChangeEvent<HTMLInputElement>)=>setSearch(e.target.value)} />
             <div className='flex p-2 flex-col'>
                 {result.map((user)=>(
-                  <Contact username={user.username}/>
+                  <Contact username={user.username} id={user._id}/>
                 ))}
             </div>
         </div>

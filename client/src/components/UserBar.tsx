@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Contact from './Contact'
 import Burger from './Burger'
@@ -6,11 +7,21 @@ import BarContext from '../context/BarContext'
 import ChangeAccountMenu from './ChangeAccountMenu'
 import FindContact from './FindContact'
 import { useMainContext } from '../context/MainContext'
+import { useEffect } from 'react'
+import { useChat } from '../context/ChatContext'
+
+
 
 export default function UserBar() {
 
 
   const {toggleFindContact} = useMainContext()
+  const {fetchingChats, chats} = useChat();
+
+  useEffect(()=>{
+    fetchingChats()
+  })
+  
   return (
     <BarContext>
     <div className='w-1/4 min-h-screen font-inter text-2xl bg-cyan-600  pt-2   '>
@@ -20,7 +31,10 @@ export default function UserBar() {
       </div>
         <h2 className='text-lg pl-2'>Contacts:</h2>
         <div className='pt-4'>
-          <Contact/>
+          {chats?.map((chat:any)=>(
+            <Contact chatName={chat.chatName} key={chat._id} latestMessage={chat.latestMessage} />
+          ))}
+          
         </div>
     </div>
     

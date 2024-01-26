@@ -5,14 +5,14 @@ import React from 'react'
 
 
 
+
 interface ContextType {
-    selectedChat:string|undefined,
-    setSelectedChat:(chatId:string|undefined)=>void;
+    selectedChat:[string, React.Dispatch<React.SetStateAction<string>>]
     messagesOfChat:unknown[],
     fetchingMessage:(chatId:string)=>void,
     chats:unknown[],
     fetchingChats:()=>void,
-    accessChat:()=>void
+    accessChat:(userId:string)=>void
 
 }
 
@@ -55,8 +55,18 @@ export default function ChatContext({children}:ComponentsProps) {
 
     const accessChat = async(userId:string) =>{
         try{
-            const response = await axios.post('http://localhost:5000/chat/access',{userId})
-            console.log(response);
+            const response = await axios.post('http://localhost:5000/chat/access',{userId}, {
+                headers:{
+                    'Authorization':`Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type':'application/json'
+                }
+            })
+
+            const chat = response.data.chat
+
+            setSelectedChat(chat._id);
+            
+            
         }
         catch(error){
             console.log(error)
@@ -67,12 +77,12 @@ export default function ChatContext({children}:ComponentsProps) {
 
     
     const contextValue:ContextType = {
-        selectedChat,
-        setSelectedChat,
+        selectedChat:[selectedChat, setSelectedChat],
         messagesOfChat,
         fetchingMessage,
         chats:chats,
-        fetchingChats:fetchingChats
+        fetchingChats:fetchingChats,
+        accessChat:accessChat
     } 
   return (
     <ChatContextProvider.Provider value={contextValue}>

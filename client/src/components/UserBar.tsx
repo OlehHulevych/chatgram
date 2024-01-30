@@ -32,8 +32,9 @@ export default function UserBar() {
         <h2 className='text-lg pl-2'>Contacts:</h2>
         <div className='pt-4'>
           {chats?.map((chat:any)=>(
-            <Contact chatName={chat.chatName} key={chat._id} latestMessage={chat.latestMessage} />
-          ))}
+            <Contact chatName={chat.chatName} key={chat._id} latestMessage={chat.latestMessage} id={chat._id}/>
+            
+          )) }
           
         </div>
     </div>

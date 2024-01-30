@@ -7,7 +7,7 @@ import { decoder } from "../utils/decoder";
 
 
 dotenv.config()
-const expiresInTime = 3*24*60*60
+const expiresInTime = 20*24*60*60
 const jwt_secret:any = process.env.JWT_SECRET; 
 
 

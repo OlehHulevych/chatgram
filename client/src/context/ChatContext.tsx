@@ -1,4 +1,5 @@
-import { useContext, createContext, useState, ReactNode } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { useContext, createContext, useState, ReactNode, useEffect } from "react";
 import axios from "axios";
 import React from 'react'
 
@@ -7,8 +8,9 @@ import React from 'react'
 
 
 interface ContextType {
-    selectedChat:[string, React.Dispatch<React.SetStateAction<string>>]
-    messagesOfChat:unknown[],
+    selectedChat:string,
+    setSelectedChat:(id:string)=>void,
+    messagesOfChat:any[],
     fetchingMessage:(chatId:string)=>void,
     chats:unknown[],
     fetchingChats:()=>void,
@@ -27,10 +29,17 @@ const ChatContextProvider =  createContext<ContextType | undefined>(undefined)
 
 
 export default function ChatContext({children}:ComponentsProps) {
-    const [selectedChat, setSelectedChat] = useState<string | undefined>('')
+    const [selectedChat, setSelectedChat] = useState<string>('')
     const [chats, setChats] = useState([]);
 
     const [messagesOfChat, setMessagesChat] = useState([])
+
+
+    useEffect(()=>{
+        fetchingMessage(selectedChat)
+        console.log("The messages are fetching")
+    }, [selectedChat])
+    
 
     const fetchingChats = async()=>{
         const response = await axios.get('http://localhost:5000/chat/get', {
@@ -46,11 +55,29 @@ export default function ChatContext({children}:ComponentsProps) {
     }
 
     const fetchingMessage = async(chatId:string) =>{
-        const res =  await axios.get(`http://localhost:5000/message/get/${chatId}`);
-        const messages = res.data.messages;
-        setMessagesChat(messages)
+        try{
+            if(!chatId){
+                const res =  await axios.get(`http://localhost:5000/message/get/${chatId}`);
+               
+                const messages = res.data.messages;
+                setMessagesChat(messages)
+            }
+            else{
+                console.log("No messages yet")
+            }
+            
+        }
+        catch(error){
+            console.log("Something went wrong.There are error: "+error)
+        }
+       
 
        
+    }
+
+    const handleSelectedChat = (id:string)=>{
+        setSelectedChat(id);
+        console.log(id)
     }
 
     const accessChat = async(userId:string) =>{
@@ -77,8 +104,9 @@ export default function ChatContext({children}:ComponentsProps) {
 
     
     const contextValue:ContextType = {
-        selectedChat:[selectedChat, setSelectedChat],
-        messagesOfChat,
+        selectedChat:selectedChat,
+        setSelectedChat:handleSelectedChat,
+        messagesOfChat:messagesOfChat,
         fetchingMessage,
         chats:chats,
         fetchingChats:fetchingChats,

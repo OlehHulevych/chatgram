@@ -1,6 +1,6 @@
 
 import Layout from './Layout'
-import MessageItem from './MessageItem'
+
 import { useChat } from '../context/ChatContext'
 
 export default function MessageDisplay() {
@@ -13,9 +13,11 @@ export default function MessageDisplay() {
               <header className='w-full p-2  bg-cyan-700  items-center pt-4'>
                 <div>Someuser user</div>
               </header>
-              <main className=' pt-4   w-full h-5/6  pr-2 items-end justify-end  bg-cyan-800  flex grow flex-col '>
+              <main className=' pt-4   w-full h-5/6 min-h-[636px]  pr-2 items-end justify-end  bg-cyan-800  flex grow flex-col '>
                 <div className='overflow-y-auto'>
-                  
+                 {/* {messagesOfChat.map((message) => (
+                    <MessageItem key={message._id} username={message.sender} text={message.text} />
+                  ))} */}
                 </div>
               </main>
               <footer className='h-[10%] bg-cyan-700 p-2 pt-4   '>

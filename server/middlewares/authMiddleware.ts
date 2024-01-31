@@ -12,6 +12,7 @@ dotenv.config()
 
 export const authMiddleware = async(req:any,res:Response, next:NextFunction ) =>{
     const {authorization}:any = req.headers
+    console.log("Auhtorization")
 
     if(!authorization) {
         return res.status(401).json({error:"There are no user"})

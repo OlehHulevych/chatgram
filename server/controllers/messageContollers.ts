@@ -11,13 +11,15 @@ export interface UserRequest extends Request{
     user:Document<User, any>
 }
 
-export const getMessage = async (req:Request,res:Response) =>{
+export const getMessage = async (req:any,res:Response) =>{
+    const id =  req.params.id || req.query.id;
     try{
-        const messages = await MessageModel.find({chat:req.params.chatid})
+       
+        console.log("Hello world");
+        const messages = await MessageModel.find({chat:id})
         .populate('sender', 'username')
         .populate('chat') 
-
-        return res.json(messages)
+        return res.json({messages:messages})
     }
     catch(error){
         console.log(error)

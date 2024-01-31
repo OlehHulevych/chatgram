@@ -38,7 +38,7 @@ export default function ChatContext({children}:ComponentsProps) {
     useEffect(()=>{
         fetchingMessage(selectedChat)
         console.log("The messages are fetching")
-    }, [selectedChat])
+    }, [messagesOfChat])
     
 
     const fetchingChats = async()=>{
@@ -55,11 +55,19 @@ export default function ChatContext({children}:ComponentsProps) {
     }
 
     const fetchingMessage = async(chatId:string) =>{
+        
         try{
-            if(!chatId){
-                const res =  await axios.get(`http://localhost:5000/message/get/${chatId}`);
+            console.log("fetching messages")
+            if(chatId){
+                const res =  await axios.get(`http://localhost:5000/message/get/${chatId}`,{
+                    headers:{
+                        'Authorization':`Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type':'application/json'
+                    }
+                });
                
                 const messages = res.data.messages;
+                console.log(messages)
                 setMessagesChat(messages)
             }
             else{

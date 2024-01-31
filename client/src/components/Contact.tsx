@@ -21,7 +21,7 @@ export default function Contact({chatName,  latestMessage, id}:contactProps) {
         </div>
         <div className='ml-12'>
             <div className='text-lg'>{chatName}</div>
-            <div className='text-base'>{latestMessage? latestMessage:''}</div>
+            <div className='text-base'>{latestMessage.sender.username}:{latestMessage.text}</div>
         </div> 
     </div>
   )

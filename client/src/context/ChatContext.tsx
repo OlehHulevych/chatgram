@@ -7,6 +7,7 @@ import React from 'react'
 
 
 
+
 interface ContextType {
     selectedChat:string,
     setSelectedChat:(id:string)=>void,
@@ -30,7 +31,9 @@ const ChatContextProvider =  createContext<ContextType | undefined>(undefined)
 
 export default function ChatContext({children}:ComponentsProps) {
     const [selectedChat, setSelectedChat] = useState<string>('')
+    
     const [chats, setChats] = useState([]);
+    
 
     const [messagesOfChat, setMessagesChat] = useState([])
 
@@ -38,7 +41,7 @@ export default function ChatContext({children}:ComponentsProps) {
     useEffect(()=>{
         fetchingMessage(selectedChat)
         console.log("The messages are fetching")
-    }, [messagesOfChat])
+    }, [selectedChat])
     
 
     const fetchingChats = async()=>{
@@ -109,6 +112,8 @@ export default function ChatContext({children}:ComponentsProps) {
       
         
     }
+
+                 
 
     
     const contextValue:ContextType = {

@@ -20,7 +20,7 @@ export default function UserBar() {
 
   useEffect(()=>{
     fetchingChats()
-  })
+  },[])
   
   return (
     <BarContext>

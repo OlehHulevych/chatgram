@@ -1,11 +1,20 @@
 
 import Layout from './Layout'
 import MessageItem from './MessageItem';
+import io from 'socket.io-client'
 
 import { useChat } from '../context/ChatContext'
+import { useAuth } from '../context/AuthenticationContext';
+import { useEffect } from 'react';
 
 export default function MessageDisplay() {
   const {selectedChat, messagesOfChat} = useChat();
+  const {user} =useAuth();
+
+  useEffect(()=>{
+    const socket = io('http://localhost:5000')
+    socket.emit("setup", user)
+  },[])
   return (
     <Layout>
       <div className='w-3/4  h-[740px] overflow-hidden  '>
@@ -15,12 +24,11 @@ export default function MessageDisplay() {
                 <div>Someuser user</div>
               </header>
               <main className=' pt-4   w-full h-5/6 min-h-[636px]  pr-2  justify-end  bg-cyan-800  flex grow flex-col '>
-                <div className='overflow-y-auto relative'>
+                <div className='overflow-y-auto '>
                  {messagesOfChat?.map((message:any) => 
                 
                     (
                     <MessageItem key={message._id} username={message.sender.username} text={message.text} />
-                   
                   )
               
                  
